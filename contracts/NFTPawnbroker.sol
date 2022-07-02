@@ -35,8 +35,8 @@ contract NFTPawnbroker is IERC721Receiver {
     }
 
     function appropriate() public {
-        require(msg.sender == lender);
-        require(block.timestamp > expiration);
+        require(msg.sender == lender, "Only lender can approppriate NFT");
+        require(block.timestamp > expiration, "Deadline for reclaiming NFT has not expired");
         // transfer NFT to lender
         NFT nft = NFT(nftContract);
         nft.safeTransferFrom(address(this), lender, nftCollateral);

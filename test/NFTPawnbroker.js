@@ -21,7 +21,7 @@ describe('NFTPawnbroker', function () {
         it('lend NFT happy path', async function () {
             const itemTx = await this.nft.awardItem(this.borrower.address);
             await itemTx.wait();
-            
+
             const itemId = 1;
             expect(await this.nft.ownerOf(itemId)).to.be.equal(this.borrower.address);
 
@@ -32,7 +32,7 @@ describe('NFTPawnbroker', function () {
             await nftConnectedToBorrower.approve(nFTPawnbroker.address, itemId);
 
             let options = {
-                value: ethers.utils.parseEther("100.0")  
+                value: ethers.utils.parseEther("100.0"),
             }
             const nFTPawnbrokerConnectedToLender = nFTPawnbroker.connect(this.lender);
 
@@ -53,6 +53,40 @@ describe('NFTPawnbroker', function () {
             const borrowerBalanceAfterReclaiming = await hre.ethers.provider.getBalance(this.borrower.address);
             assert.isTrue(borrowerBalanceAfterLending.gt(borrowerBalanceAfterReclaiming), "Expected funds to be transferred from borrower to get NFT back");
             expect(await this.nft.ownerOf(itemId)).to.be.equal(this.borrower.address);
+        });
+
+        it('lend NFT, NFT appropriated by lender', async function () {
+            const itemTx = await this.nft.awardItem(this.borrower.address);
+            await itemTx.wait();
+
+            const itemId = 1;
+            expect(await this.nft.ownerOf(itemId)).to.be.equal(this.borrower.address);
+
+            const nFTPawnbroker = await this.NFTPawnbroker.connect(this.borrower).deploy(itemId, this.nft.address, 100, 1);
+            await nFTPawnbroker.deployed();
+
+            const nftConnectedToBorrower = this.nft.connect(this.borrower);
+            await nftConnectedToBorrower.approve(nFTPawnbroker.address, itemId);
+
+            let options = {
+                value: ethers.utils.parseEther("100.0"),
+            }
+            const nFTPawnbrokerConnectedToLender = nFTPawnbroker.connect(this.lender);
+
+            let borrowerBalanceBeforeLending = await hre.ethers.provider.getBalance(this.borrower.address);
+
+            const lendTx = await nFTPawnbrokerConnectedToLender.lend(options);
+            await lendTx.wait();
+
+            const borrowerBalanceAfterLending = await hre.ethers.provider.getBalance(this.borrower.address);
+            assert.isTrue(borrowerBalanceBeforeLending.lt(borrowerBalanceAfterLending), "Expected funds to be transferred to borrower");
+
+            expect(await this.nft.ownerOf(itemId)).to.be.equal(nFTPawnbroker.address);
+
+            const appropriateTx = await nFTPawnbrokerConnectedToLender.appropriate();
+            await appropriateTx.wait();
+
+            expect(await this.nft.ownerOf(itemId)).to.be.equal(this.lender.address);
         });
     });
 });
