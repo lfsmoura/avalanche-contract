@@ -5,11 +5,11 @@ import {
 import { ethers } from "hardhat"
 
 const main = async(): Promise<any> => {
-  const Coin: ContractFactory = await ethers.getContractFactory("ExampleERC20")
-  const coin: Contract = await Coin.deploy()
+  const NFT: ContractFactory = await ethers.getContractFactory("NFT")
+  const nft: Contract = await NFT.deploy()
 
-  await coin.deployed()
-  console.log(`Coin deployed to: ${coin.address}`)
+  await nft.deployed()
+  console.log(`NFT deployed to: ${nft.address}`)
 }
 
 main()

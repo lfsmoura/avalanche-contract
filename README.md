@@ -2,6 +2,8 @@
 
 This repo is created based on `https://github.com/ava-labs/avalanche-smart-contract-quickstart`.
 
+The contract I implemented is a simple Pawnbroker for NFTs. A borrower creates a contract setting a price for their NFT and a time until they can reclaim their NFT. A lender then can lend the ether to the borrower. If the borrower reclaim their NFT before the stipulated time, they can get their NFT back. If the deadline passes, the lender can appropriate the NFT.
+
 ## Development logs
 
 ### Installing avalanche
@@ -39,4 +41,14 @@ Successfully created genesis
     0x61e0B3CD93F36847Abbd5d40d6F00a8eC6f3cfFB has balance 0
     0x0Fa8EA536Be85F32724D57A37758761B86416123 has balance 0
     Done in 7.49s.
+```
+
+### Creating a test and interface for contract
+
+I created a simple contract with empty functions and created a test for it. The test initially failed because there was no logic in the contract.
+
+To run tests run:
+
+```
+    npm run test
 ```
