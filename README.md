@@ -1,8 +1,22 @@
 # Avalanche contract repo
 
-This repo is created based on `https://github.com/ava-labs/avalanche-smart-contract-quickstart`.
+This repo is created based on repo `https://github.com/ava-labs/avalanche-smart-contract-quickstart`.
 
-The contract I implemented is a simple Pawnbroker for NFTs. A borrower creates a contract setting a price for their NFT and a time until they can reclaim their NFT. A lender then can lend the ether to the borrower. If the borrower reclaim their NFT before the stipulated time, they can get their NFT back. If the deadline passes, the lender can appropriate the NFT.
+The contract I implemented is a simple Pawnbroker for NFTs. A borrower creates a contract setting a price for their NFT and a time until they can reclaim their NFT. A lender then can lend the ether to the borrower. If the borrower reclaims their NFT before the stipulated time, they can get their NFT back. If the deadline passes, the lender can appropriate the NFT.
+
+To run tests run:
+
+```
+    npm run test
+```
+
+To deploy on local subnet run:
+
+```
+    npm run deploy-local
+```
+
+I created `NFTPawnbroker` from scratch. Some future developments for that contract would be to implement interest on payments, allow extensions on the deadline for a fee, and allow fractional lending.
 
 ## Development logs
 
@@ -52,3 +66,33 @@ To run tests run:
 ```
     npm run test
 ```
+
+### Deploying to local and testnet
+
+Lastly I deployed the contract to local subnet and to FUJI testnet by running `npm run deploy-local` and `npm run deploy`.
+
+```
+> Executing task: npm run deploy-local <
+
+
+> avalanche-smart-contract@1.0.0 deploy-local
+> npx hardhat run scripts/deploy.ts --network local
+
+NFT deployed to: 0x5DB9A7629912EBF95876228C24A848de0bfB43A9
+Signer address: 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
+NFT Pawnbroker deployed to: 0x5DB9A7629912EBF95876228C24A848de0bfB43A9
+```
+
+```
+> Executing task: npm run deploy <
+
+
+> avalanche-smart-contract@1.0.0 deploy
+> npx hardhat run scripts/deploy.ts --network fuji
+
+NFT deployed to: 0xD2f748492044dF91667Dea05B7E158a94d8e2E0f
+Signer address: 0x785d82e5407131474Ec1cE2895B94E05134738A9
+NFTPawnbroker deployed to: 0xD2f748492044dF91667Dea05B7E158a94d8e2E0f
+```
+
+Here's a link to contract creation transaction on testnet: `https://testnet.snowtrace.io/address/0xD2f748492044dF91667Dea05B7E158a94d8e2E0f#code`.

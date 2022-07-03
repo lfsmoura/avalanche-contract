@@ -85,7 +85,7 @@ export default {
       gasPrice: 225000000000,
       chainId: 43113,
       accounts: [
-        process.env.PRIVATE_KEY,
+        process.env.PRIVATE_KEY_FUJI,
       ],
     },
     mainnet: {
